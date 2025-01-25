@@ -2,8 +2,6 @@
 .venv
 
 # frontend
-frontend/
 
 # backend
-backend/
 backend/.venv
