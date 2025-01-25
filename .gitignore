@@ -1,0 +1,9 @@
+# files to ignore no matter where it is
+.venv
+.DS_Store
+
+# frontend
+
+# backend
+backend/.venv
+backend/data/TrainingData
