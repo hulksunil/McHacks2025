@@ -25,6 +25,8 @@ function Chart() {
   };
 
   const options = {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: true
@@ -58,4 +60,14 @@ function Chart() {
   return <canvas ref={chartRef}></canvas>;
 }
 
-export default Chart;
+const App = () => {
+
+  return (
+    <div className='graph' >
+      <h1>Stock Price</h1>
+      <Chart />
+    </div>
+  );
+};
+
+export default App;
