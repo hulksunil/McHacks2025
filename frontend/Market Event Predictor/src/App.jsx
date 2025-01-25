@@ -1,104 +1,61 @@
-import React from "react";
-import { SciChartReact } from "scichart-react";
-import {
-  SweepAnimation,
-  SciChartJsNavyTheme,
-  NumberRange,
-  EAxisType,
-  EChart2DModifierType,
-  ESeriesType,
-  EPointMarkerType,
-} from "scichart";
+import React, { useRef, useEffect } from 'react';
+import { Line } from "react-chartjs-2";
 
-const chartConfig = {
-  surface: {
-    theme: new SciChartJsNavyTheme(),
-    title: "SciChart.js First Chart",
-    titleStyle: { fontSize: 22 },
-  },
-  // Create an XAxis and YAxis with growBy padding
-  xAxes: [
-    {
-      type: EAxisType.NumericAxis,
-      options: {
-        axisTitle: "X Axis",
-        growBy: new NumberRange(0.1, 0.1),
-      },
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, Title } from "chart.js";
+
+ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
+
+function Chart() {
+  const chartRef = useRef(null);
+  const chartInstance = useRef(null); // Store chart instance
+
+  const data = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    datasets: [
+      {
+        label: 'Stock Price',
+        data: [65, 59, 80, 81, 56, 55, 40],
+        backgroundColor: 'rgb(25, 25, 192)',
+        borderColor: 'rgb(75, 192, 192)',
+        pointBorderColor: 'rgb(75, 100, 192)',
+        fill: true,
+        tension: 0.4
+      }
+    ]
+  };
+
+  const options = {
+    plugins: {
+      legend: {
+        display: true
+      }
     },
-  ],
-  yAxes: [
-    {
-      type: EAxisType.NumericAxis,
-      options: {
-        axisTitle: "Y Axis",
-        growBy: new NumberRange(0.1, 0.1),
-      },
-    },
-  ],
-  // Create a line series with some initial data
-  series: [
-    {
-      type: ESeriesType.LineSeries,
-      xyData: {
-        xValues: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-        yValues: [
-          0, 0.0998, 0.1986, 0.2955, 0.3894, 0.4794, 0.5646, 0.6442, 0.7173,
-          0.7833,
-        ],
-      },
-      options: {
-        stroke: "steelblue",
-        strokeThickness: 3,
-        pointMarker: {
-          type: EPointMarkerType.Ellipse,
-          options: {
-            width: 11,
-            height: 11,
-            fill: "#fff",
-          },
-        },
-        animation: new SweepAnimation({
-          duration: 300,
-          fadeEffect: true,
-        }),
-      },
-    },
-  ],
-  // Add some interaction modifiers to show zooming and panning
-  modifiers: [
-    { type: EChart2DModifierType.MouseWheelZoom },
-    {
-      type: EChart2DModifierType.ZoomPan,
-      options: { enableZoom: true },
-    },
-    { type: EChart2DModifierType.ZoomExtents },
-  ],
-};
+    scales: {
+      y: {
+        min: 30,
+        max: 90,
+        ticks: {
+          stepSize: 10
+        }
+      }
+    }
+  };
 
-function App() {
-  // LICENSING
-  // Commercial licenses set your license code here
-  // Purchased license keys can be viewed at https://www.scichart.com/profile
-  // How-to steps at https://www.scichart.com/licensing-scichart-js/
-  // SciChartSurface.setRuntimeLicenseKey("YOUR_RUNTIME_KEY");
+  useEffect(() => {
+    // Destroy chart if it already exists before creating a new one
+    if (chartInstance.current) {
+      chartInstance.current.destroy();
+    }
 
-  // to use WebAssembly and Data files from CDN instead of the same origin
-  // SciChartSurface.loadWasmFromCDN();
+    const ctx = chartRef.current.getContext('2d');
+    chartInstance.current = new ChartJS(ctx, {
+      type: 'line',
+      data: data,
+      options: options
+    });
+  }, [data, options]);
 
-  // Note: for both licensing and WASM configurations - make sure they are set on the client side.
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>SciChart.js with React hello world!</h1>
-        <p>
-          In this example we setup webpack, react and use scichart +
-          scichart-react to create a simple chart with one X and Y axis
-        </p>
-      </header>
-      <SciChartReact config={chartConfig} style={{ maxWidth: 900 }} />
-    </div>
-  );
+  return <canvas ref={chartRef}></canvas>;
 }
 
-export default App;
+export default Chart;
