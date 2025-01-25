@@ -1,0 +1,9 @@
+# ignore the python virtual environment no matter where it is
+.venv
+
+# frontend
+frontend/
+
+# backend
+backend/
+backend/.venv
