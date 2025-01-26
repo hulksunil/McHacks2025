@@ -26,7 +26,7 @@ ChartJS.register(
   zoomPlugin
 );
 
-const MyChart = ({ data }) => {
+const MyChart = ({ title, data }) => {
   const options = {
     responsive: true,
     plugins: {
@@ -35,7 +35,7 @@ const MyChart = ({ data }) => {
       },
       title: {
         display: true,
-        text: "Chart.js Line Chart",
+        text: title,
       },
       zoom: {
         pan: {
@@ -59,7 +59,7 @@ const MyChart = ({ data }) => {
           mode: "xy",
           limits: {
             x: { min: 0, max: 15000 }, // 0 to 15 seconds in milliseconds
-            y: { min: 0, max: 500 }, // Set y-axis limits
+            y: { min: 0, max: 200 }, // Set y-axis limits
           },
         },
       },
@@ -87,7 +87,7 @@ const MyChart = ({ data }) => {
       },
       y: {
         min: 0, // Set minimum value for y-axis
-        max: 500, // Set maximum value for y-axis
+        max: 200, // Set maximum value for y-axis
       },
     },
   };
