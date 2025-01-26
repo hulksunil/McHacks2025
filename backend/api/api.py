@@ -29,6 +29,12 @@ def trade_data():
 
     return jsonify(trade_data, 200)
 
+@app.route('/api/stock_data/market_d', methods=['GET'])
+def market_data():
+    data = get_stock_data()
+    
+    market_data = [data[stock]['market_data'] for stock in data]
+    return jsonify(market_data, 200)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
