@@ -15,8 +15,28 @@
   width: 100vw;
 }
 
-#root{
+#root {
   width: 100vw;
   height: 60vw;
 }
 
+
+.loader_icon {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999999;
+  background-color: #0c0513;
+  background-image: url(./assets/loader.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 10%;
+  transition: opacity 0.1s linear, visibility .5s linear;
+}
+
+.loader_icon_none {
+  visibility: hidden;
+  opacity: 0;
+}
