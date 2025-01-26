@@ -196,7 +196,7 @@ input_shape = (x_train.shape[1], x_train.shape[2])
 
 # define the LSTM model
 model = Sequential()
-model.add(LSTM(100, input_shape=input_shape, return_sequences=True))
+model.add(LSTM(100, input_shape=input_shape, return_sequences=False))
 model.add(Dense(1, activation='sigmoid'))
 
 """### Compile model"""
@@ -269,4 +269,5 @@ loaded_model = load_model(Save_model_dir)
 """### Save model"""
 
 # save in tensoflow model
+Save_model_dir = 'LSTM_model.keras' # Add the .keras extension to the filename
 model.save(Save_model_dir)
