@@ -61,7 +61,7 @@ Save_model_dir = 'LSTM_model'
 """
 
 # List of stocks and splits
-periods = ['1', '2', '3', '4','5']
+periods = ['1']
 stocks = ['A', 'B', 'C', 'D', 'E']
 splits = ['0', '1', '2', '3', '4','5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']
 
@@ -112,12 +112,40 @@ period_market_data = pd.concat(market_data_list, ignore_index=True)
 period_trade_data = pd.concat(trade_data_list, ignore_index=True)
 
 # Merge the data on the nearest timestamp
-period_market_data['timestamp'] = pd.to_datetime(period_market_data['timestamp'])
-period_trade_data['timestamp'] = pd.to_datetime(period_trade_data['timestamp'])
+period_market_data['timestamp'] = pd.to_datetime(period_market_data['timestamp'], errors='coerce')
+period_trade_data['timestamp'] = pd.to_datetime(period_trade_data['timestamp'], errors='coerce')
 
-# Sort values for merge_asof
-period_market_data.sort_values(by=['stock', 'timestamp'], inplace=True)
-period_trade_data.sort_values(by=['stock', 'timestamp'], inplace=True)
+# Drop any rows where timestamp is null
+period_market_data.dropna(subset=['timestamp'], inplace=True)
+period_trade_data.dropna(subset=['timestamp'], inplace=True)
+
+
+# Sort by stock, then timestamp, and reset index
+period_market_data = (
+    period_market_data
+    .sort_values(['stock', 'timestamp'], ascending=[True, True])
+    .reset_index(drop=True)
+)
+period_trade_data = (
+    period_trade_data
+    .sort_values(['stock', 'timestamp'], ascending=[True, True])
+    .reset_index(drop=True)
+)
+
+# **Ensure 'timestamp' is sorted within each 'stock' group in period_market_data**
+period_market_data = period_market_data.groupby('stock').apply(lambda x: x.sort_values('timestamp')).reset_index(drop=True)
+period_trade_data = period_trade_data.groupby('stock').apply(lambda x: x.sort_values('timestamp')).reset_index(drop=True)
+
+# Optionally verify monotonic_increasing in each group
+for s in period_market_data['stock'].unique():
+    subset = period_market_data[period_market_data['stock'] == s]
+    if not subset['timestamp'].is_monotonic_increasing:
+        print(f"period_market_data has out-of-order timestamps for stock {s}")
+
+for s in period_trade_data['stock'].unique():
+    subset = period_trade_data[period_trade_data['stock'] == s]
+    if not subset['timestamp'].is_monotonic_increasing:
+        print(f"period_trade_data has out-of-order timestamps for stock {s}")
 
 # Merge market and trade data
 merged_data = pd.merge_asof(
@@ -125,7 +153,9 @@ merged_data = pd.merge_asof(
     period_trade_data,
     on='timestamp',
     by='stock',
-    direction='nearest'
+    direction='nearest',
+    tolerance=pd.Timedelta(milliseconds=10),
+    allow_exact_matches=False
 )
 
 # Save merged_data as a CSV
