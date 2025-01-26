@@ -99,7 +99,7 @@ target_scaler.fit(merged_data[['bidPrice']])
 """### Create a scaled array"""
 
 x_data = merged_data[features].values
-y_data = merged_data['bidPrice'].values
+y_data = merged_data[['bidPrice']].values
 
 # Scale the data
 x_data_scaled = feature_scaler.transform(x_data)
