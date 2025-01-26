@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from ..data.preprocessing import get_stock_data
+from data.preprocessing import get_stock_data
 from flask_cors import CORS
 import os
 
