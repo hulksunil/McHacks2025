@@ -1,73 +1,31 @@
-import React, { useRef, useEffect } from 'react';
-import { Line } from "react-chartjs-2";
+import MyChart from './components/MyChart';
+import './App.css';
 
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, Title } from "chart.js";
 
-ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
-
-function Chart() {
-  const chartRef = useRef(null);
-  const chartInstance = useRef(null); // Store chart instance
-
-  const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [
-      {
-        label: 'Stock Price',
-        data: [65, 59, 80, 81, 56, 55, 40],
-        backgroundColor: 'rgb(25, 25, 192)',
-        borderColor: 'rgb(75, 192, 192)',
-        pointBorderColor: 'rgb(75, 100, 192)',
-        fill: true,
-        tension: 0.4
-      }
-    ]
-  };
-
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: true
-      }
-    },
-    scales: {
-      y: {
-        min: 30,
-        max: 90,
-        ticks: {
-          stepSize: 10
-        }
-      }
-    }
-  };
-
-  useEffect(() => {
-    // Destroy chart if it already exists before creating a new one
-    if (chartInstance.current) {
-      chartInstance.current.destroy();
-    }
-
-    const ctx = chartRef.current.getContext('2d');
-    chartInstance.current = new ChartJS(ctx, {
+const data = {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  datasets: [
+    {
       type: 'line',
-      data: data,
-      options: options
-    });
-  }, [data, options]);
+      label: 'Stock Price',
+      data: [65, 59, 80, 81, 56, 55, 40],
+      backgroundColor: 'rgb(25, 25, 192)',
+      borderColor: 'rgb(75, 192, 192)',
+      pointBorderColor: 'rgb(75, 100, 192)',
+      fill: true,
+      tension: 0.4
+    }
+  ]
+};
 
-  return <canvas ref={chartRef}></canvas>;
-}
 
 const App = () => {
 
   return (
-    <div className='graph' >
-      <h1>Stock Price</h1>
-      <Chart />
+    <div className="App">
+      <MyChart data={data} />
     </div>
-  );
+  )
 };
 
 export default App;
