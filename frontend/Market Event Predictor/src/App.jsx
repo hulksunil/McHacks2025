@@ -654,11 +654,11 @@ const App = () => {
 
   return (
     <>
-      {/* <Loader load={load} /> */}
+      <Loader load={load} />
 
       <Box
         sx={{
-          background: "linear-gradient(180deg, #1a237e 0%, #8e24aa 100%)", // Dark to slightly light blue-purple gradient
+          background: "", // Dark to slightly light blue-purple gradient
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
