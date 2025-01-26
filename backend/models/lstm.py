@@ -106,60 +106,24 @@ for period in periods:
           else:
               print(f"File {market_data_dir} does not exist")
 
+print("Columns in market_data:", market_data.columns)
+print("Columns in trade_data:", trade_data.columns)
 
-# Combine market and trade data for the period
-period_market_data = pd.concat(market_data_list, ignore_index=True)
-period_trade_data = pd.concat(trade_data_list, ignore_index=True)
+# Convert timestamps to datetime (if they aren't already)
+market_data['timestamp'] = pd.to_datetime(market_data['timestamp'])
+trade_data['timestamp'] = pd.to_datetime(trade_data['timestamp'])
 
-# Merge the data on the nearest timestamp
-period_market_data['timestamp'] = pd.to_datetime(period_market_data['timestamp'], errors='coerce')
-period_trade_data['timestamp'] = pd.to_datetime(period_trade_data['timestamp'], errors='coerce')
+market_data = market_data.sort_values(by='timestamp')
+trade_data = trade_data.sort_values(by='timestamp')
 
-# Drop any rows where timestamp is null
-period_market_data.dropna(subset=['timestamp'], inplace=True)
-period_trade_data.dropna(subset=['timestamp'], inplace=True)
-
-
-# Sort by stock, then timestamp, and reset index
-period_market_data = (
-    period_market_data
-    .sort_values(['stock', 'timestamp'], ascending=[True, True])
-    .reset_index(drop=True)
-)
-period_trade_data = (
-    period_trade_data
-    .sort_values(['stock', 'timestamp'], ascending=[True, True])
-    .reset_index(drop=True)
-)
-
-# **Ensure 'timestamp' is sorted within each 'stock' group in period_market_data**
-period_market_data = period_market_data.groupby('stock').apply(lambda x: x.sort_values('timestamp')).reset_index(drop=True)
-period_trade_data = period_trade_data.groupby('stock').apply(lambda x: x.sort_values('timestamp')).reset_index(drop=True)
-
-# Optionally verify monotonic_increasing in each group
-for s in period_market_data['stock'].unique():
-    subset = period_market_data[period_market_data['stock'] == s]
-    if not subset['timestamp'].is_monotonic_increasing:
-        print(f"period_market_data has out-of-order timestamps for stock {s}")
-
-for s in period_trade_data['stock'].unique():
-    subset = period_trade_data[period_trade_data['stock'] == s]
-    if not subset['timestamp'].is_monotonic_increasing:
-        print(f"period_trade_data has out-of-order timestamps for stock {s}")
-
-# Merge market and trade data
 merged_data = pd.merge_asof(
-    period_market_data,
-    period_trade_data,
+    market_data.sort_values(by=["stock", "timestamp"]),
+    trade_data[['stock','timestamp','price','volume']].sort_values(by=["stock", "timestamp"]),
     on='timestamp',
-    by='stock',
+    by='stock',            # match on the same stock symbol
     direction='nearest',
-    tolerance=pd.Timedelta(milliseconds=10),
-    allow_exact_matches=False
+    tolerance=pd.Timedelta(seconds=1)
 )
-
-# Save merged_data as a CSV
-merged_data.to_csv('merged_data.csv', index=False)
 
 """### Feature Engineering"""
 
