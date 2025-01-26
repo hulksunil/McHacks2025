@@ -104,7 +104,8 @@ def get_stock_data():
 
 def data_to_dict(stock_data):
     for stock in stock_data:
-        stock_data[stock]['market_data'] = stock_data[stock]['market_data'].to_dict(orient='records')
-        stock_data[stock]['trade_data'] = stock_data[stock]['trade_data'].to_dict(orient='records')
+        stock_data[stock]['market_data'] = stock_data[stock]['market_data'].reset_index().to_dict(orient='records')
+        stock_data[stock]['trade_data'] = stock_data[stock]['trade_data'].reset_index().to_dict(orient='records')
     return stock_data
     
+#print(next(iter(get_stock_data()['A']['market_data']))) #Use this line as a debug tool
