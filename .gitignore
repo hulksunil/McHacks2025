@@ -7,3 +7,4 @@
 # backend
 backend/.venv
 backend/data/TrainingData
+backend/models/results
