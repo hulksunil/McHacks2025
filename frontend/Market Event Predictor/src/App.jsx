@@ -672,22 +672,22 @@ const App = () => {
               MarketSnitch
             </Typography>
             <Box className="graph" sx={{ my: 4 }}>
-              <MyChart title={"AskPrice vs BidPrice"} data={bidPricesData} />
+              <MyChart title={"AskPrice vs BidPrice"} data={bidPricesData} yMin={100} yMax={120} />
             </Box>
             <Box className="graph" sx={{ my: 4 }}>
-              <MyChart title={"AskVolume vs BidVolume"} data={askVolumesData} />
+              <MyChart title={"AskVolume vs BidVolume"} data={askVolumesData} yMin={0} yMax={180} />
             </Box>
             <Box className="graph" sx={{ my: 4 }}>
-              <MyChart title={"Mid Price Comparison"} data={midPriceData} />
+              <MyChart title={"Mid Price Comparison"} data={midPriceData} yMin={100} yMax={120} />
             </Box>
             <Box className="graph" sx={{ my: 4 }}>
-              <MyChart title={"Spread"} data={spreadsData} />
+              <MyChart title={"Spread"} data={spreadsData} yMin={0} yMax={0.45} />
             </Box>
             <Box className="graph" sx={{ my: 4 }}>
-              <MyChart title={"std_30s"} data={std30sData} />
+              <MyChart title={"std_30s"} data={std30sData} yMin={0} yMax={0.8} />
             </Box>
             <Box className="graph" sx={{ my: 4 }}>
-              <MyChart title={"std_60s"} data={std60sData} />
+              <MyChart title={"std_60s"} data={std60sData} yMin={0} yMax={1} />
             </Box>
             <GradientToggleButton
               position={position}
