@@ -1,4 +1,4 @@
 pandas
 flask
-flask-cors
 scikit-learn
+flask-cors
