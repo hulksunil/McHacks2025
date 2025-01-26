@@ -96,6 +96,15 @@ def get_stock_data():
     #     print(stock_data['A']['market_data'].head(40))
     #     print("Trade Data for Stock A:")
     #     print(stock_data['A']['trade_data'].head())
-        
     
+    data_to_dict(stock_data)
+    
+    return stock_data
 
+
+def data_to_dict(stock_data):
+    for stock in stock_data:
+        stock_data[stock]['market_data'] = stock_data[stock]['market_data'].to_dict(orient='records')
+        stock_data[stock]['trade_data'] = stock_data[stock]['trade_data'].to_dict(orient='records')
+    return stock_data
+    
