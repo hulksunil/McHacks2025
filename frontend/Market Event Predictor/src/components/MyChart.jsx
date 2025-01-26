@@ -26,7 +26,7 @@ ChartJS.register(
   zoomPlugin
 );
 
-const MyChart = ({ title, data }) => {
+const MyChart = ({ title, data, yMin, yMax }) => {
   const options = {
     responsive: true,
     plugins: {
@@ -86,8 +86,8 @@ const MyChart = ({ title, data }) => {
         },
       },
       y: {
-        min: 0, // Set minimum value for y-axis
-        max: 200, // Set maximum value for y-axis
+        min: yMin, // Set minimum value for y-axis
+        max: yMax, // Set maximum value for y-axis
       },
     },
   };
