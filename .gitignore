@@ -1,0 +1,8 @@
+# ignore the python virtual environment no matter where it is
+.venv
+
+# frontend
+
+# backend
+backend/.venv
+backend/TrainingData
