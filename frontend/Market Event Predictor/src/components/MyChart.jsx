@@ -26,7 +26,7 @@ ChartJS.register(
   zoomPlugin
 );
 
-const MyChart = ({ data }) => {
+const MyChart = ({ title, data }) => {
   const options = {
     responsive: true,
     plugins: {
@@ -35,7 +35,7 @@ const MyChart = ({ data }) => {
       },
       title: {
         display: true,
-        text: "Chart.js Line Chart",
+        text: title,
       },
       zoom: {
         pan: {
