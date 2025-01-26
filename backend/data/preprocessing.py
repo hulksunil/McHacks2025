@@ -89,6 +89,8 @@ def get_stock_data():
         market_data['std_60s'] = market_data['midPrice'].rolling('60s', min_periods=60).std()
         
         market_data = market_data.fillna(0)
+
+
         stock_data[stock]['market_data'] = market_data
         
     # if 'A' in stock_data:
@@ -96,6 +98,18 @@ def get_stock_data():
     #     print(stock_data['A']['market_data'].head(40))
     #     print("Trade Data for Stock A:")
     #     print(stock_data['A']['trade_data'].head())
-        
     
+    data_to_dict(stock_data)
+    
+    return stock_data
 
+
+def data_to_dict(stock_data):
+    for stock in stock_data:
+        stock_data[stock]['market_data']['timestamp'] = stock_data[stock]['market_data'].index.astype(str)
+        stock_data[stock]['market_data'] = stock_data[stock]['market_data'].reset_index(drop=True).to_dict(orient='records')
+        stock_data[stock]['trade_data']['timestamp'] = stock_data[stock]['trade_data']['timestamp'].astype(str)
+        stock_data[stock]['trade_data'] = stock_data[stock]['trade_data'].reset_index().to_dict(orient='records')
+    return stock_data
+    
+print(next(iter(get_stock_data()['A']['market_data']))) #Use this line as a debug tool
