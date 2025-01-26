@@ -19,7 +19,10 @@ def market_data():
 @app.route('/api/stock_data/trade_data', methods=['POST'])
 def trade_data():
     data = get_stock_data()
-    return jsonify(data['trade_data'], 200)
+    
+    trade_data = [data[stock]['trade_data'] for stock in data]
+
+    return jsonify(trade_data, 200)
 
 if __name__ == '__main__':
     app.run(debug=True)
