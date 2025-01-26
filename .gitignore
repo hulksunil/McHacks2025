@@ -8,3 +8,4 @@
 backend/.venv
 backend/data/TrainingData
 backend/models/results
+backend/data/TrainingData.zip
